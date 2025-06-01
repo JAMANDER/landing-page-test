@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Revax - Coming Soon</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://js-eu1.hsforms.net/forms/embed/146089797.js" defer></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #000000;
+            color: #F6F0EB;
+            overflow-x: hidden;
+        }
+
+        /* Hide scrollbars but keep scroll functionality */
+        html {
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* Internet Explorer 10+ */
+        }
+        
+        html::-webkit-scrollbar { /* WebKit */
+            width: 0;
+            height: 0;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+            width: 100vw;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .title {
+            font-size: clamp(2.5rem, 8vw, 8rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            line-height: 1.1;
+            animation: fadeInUp 1.5s ease-out;
+            color: #F6F0EB;
+            margin-top: 15vh;
+        }
+
+        .subtitle {
+            font-size: clamp(1rem, 3vw, 1.5rem);
+            font-weight: 300;
+            margin-top: 2rem;
+            opacity: 0.8;
+            animation: fadeInUp 1.5s ease-out 0.5s both;
+            color: #F6F0EB;
+        }
+
+        .description {
+            font-size: clamp(1.2rem, 4vw, 2rem);
+            font-weight: 400;
+            margin-top: 3rem;
+            opacity: 0.9;
+            line-height: 1.4;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp 1.5s ease-out 0.5s both;
+            color: #F6F0EB;
+        }
+
+        .newsletter-section {
+            margin-top: 4rem;
+            text-align: center;
+            animation: fadeInUp 1.5s ease-out 0.8s both;
+            position: relative;
+            width: 352px;
+            margin-left: auto;
+            margin-right: auto;
+            display: flex;
+            justify-content: center;
+            left: 0;
+        }
+
+        .newsletter-form {
+            position: relative;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .newsletter-input {
+            background: #333;
+            border-radius: 50px;
+            border: none;
+            padding: 18px 28px;
+            width: 0;
+            margin-right: -62px;
+            opacity: 0;
+            float: right;
+            color: #F6F0EB;
+            font-size: 22px;
+            font-family: 'Space Grotesk', sans-serif;
+            outline: none;
+        }
+
+        .newsletter-input::placeholder {
+            color: #666;
+            font-size: 22px;
+        }
+
+        .newsletter-button {
+            padding: 0;
+            width: 200px;
+            height: 52px;
+            position: relative;
+            top: 0;
+            right: 0;
+            opacity: 1;
+            transform-origin: 50% 50%;
+            cursor: pointer;
+            background: #F6F0EB;
+            color: #000000;
+            text-transform: uppercase;
+            border-radius: 50px;
+            border: none;
+            font-weight: bold;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 11px;
+            outline: none;
+        }
+
+        .newsletter-button.active .start {
+            display: none;
+        }
+
+        .newsletter-button.done .start {
+            display: none;
+        }
+
+        .newsletter-button.done .done {
+            display: block;
+            opacity: 0;
+        }
+
+        .newsletter-button img {
+            width: 23px;
+            top: 14px;
+            left: 2px;
+            opacity: 0;
+            position: absolute;
+            pointer-events: none;
+        }
+
+        .newsletter-button .done {
+            display: none;
+        }
+
+        .newsletter-button:hover {
+            background-color: #E8DDD5;
+        }
+
+        /* HubSpot form integration */
+        .hs-form-frame {
+            display: none !important;
+            position: absolute;
+            left: -9999px;
+            opacity: 0;
+        }
+
+        /* Style HubSpot form to match design */
+        .hs-form-frame iframe {
+            border: none !important;
+            background: transparent !important;
+        }
+
+        .sponsors-section {
+            margin-top: 4rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            animation: fadeInUp 1.5s ease-out 1.2s both;
+        }
+
+        .sponsors-title {
+            font-family: 'Space Mono', monospace;
+            font-size: clamp(0.8rem, 2vw, 1rem);
+            font-weight: 400;
+            color: #F6F0EB;
+            opacity: 0.7;
+            margin-bottom: 2rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .sponsors-logos {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            justify-items: center;
+            align-items: center;
+            gap: 3rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .sponsor-logo {
+            width: auto;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        .sponsor-logo:hover {
+            opacity: 1;
+        }
+
+        .sponsor-logo:nth-child(1) { /* Cambridge */
+            height: 46px;
+            justify-self: end;
+        }
+
+        .sponsor-logo:nth-child(2) { /* King's */
+            height: 85px;
+            justify-self: center;
+        }
+
+        .sponsor-logo:nth-child(3) { /* Mistral */
+            height: 60px;
+            justify-self: start;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile optimizations */
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 15px;
+            }
+            
+            .title {
+                font-size: clamp(2rem, 12vw, 4rem);
+                margin-top: 10vh;
+            }
+            
+            .subtitle {
+                font-size: clamp(0.9rem, 4vw, 1.2rem);
+                margin-top: 1.5rem;
+            }
+
+            .description {
+                font-size: clamp(1rem, 5vw, 1.5rem);
+                margin-top: 2rem;
+                max-width: 90%;
+                line-height: 1.3;
+            }
+
+            .newsletter-section {
+                margin-top: 3rem;
+                width: 90%;
+                max-width: 320px;
+            }
+
+            .newsletter-input {
+                font-size: 18px;
+            }
+
+            .newsletter-input::placeholder {
+                font-size: 18px;
+            }
+
+            .newsletter-button {
+                width: 180px;
+                height: 48px;
+                font-size: 10px;
+            }
+
+            .sponsors-section {
+                margin-top: 3rem;
+            }
+
+            .sponsors-logos {
+                gap: 2rem;
+                grid-template-columns: 1fr 1fr 1fr;
+                max-width: 100%;
+            }
+
+            .sponsor-logo:nth-child(1) { /* Cambridge */
+                height: 35px;
+                justify-self: center;
+            }
+
+            .sponsor-logo:nth-child(2) { /* King's */
+                height: 45px;
+                justify-self: center;
+            }
+
+            .sponsor-logo:nth-child(3) { /* Mistral */
+                height: 40px;
+                justify-self: center;
+            }
+        }
+
+        /* Very small screens */
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px 10px;
+            }
+
+            .title {
+                font-size: clamp(1.8rem, 15vw, 3rem);
+                margin-top: 8vh;
+            }
+
+            .description {
+                font-size: clamp(0.9rem, 5vw, 1.2rem);
+                margin-top: 1.5rem;
+                max-width: 95%;
+                line-height: 1.2;
+            }
+
+            .newsletter-section {
+                margin-top: 2rem;
+                width: 95%;
+                max-width: 280px;
+            }
+
+            .newsletter-button {
+                width: 160px;
+                height: 44px;
+                font-size: 9px;
+            }
+
+            .newsletter-input {
+                font-size: 16px;
+                padding: 14px 24px;
+            }
+
+            .newsletter-input::placeholder {
+                font-size: 16px;
+            }
+
+            .sponsors-section {
+                margin-top: 2rem;
+            }
+
+            .sponsors-logos {
+                gap: 1.5rem;
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto;
+            }
+
+            .sponsor-logo {
+                height: 35px;
+                justify-self: center;
+            }
+
+            .sponsor-logo:nth-child(1) { /* Cambridge */
+                height: 30px;
+            }
+
+            .sponsor-logo:nth-child(2) { /* King's */
+                height: 40px;
+            }
+
+            .sponsor-logo:nth-child(3) { /* Mistral */
+                height: 35px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div>
+            <h1 class="title">Project Revax</h1>
+            <h2 class="description">A development programme to build a new class of software for M&A tax professionals</h2>
+            
+            <div class="newsletter-section">
+                <form class="newsletter-form">
+                    <input type="email" class="newsletter-input" placeholder="Email">
+                    <button type="submit" class="newsletter-button first">
+                        <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTQgNEgyMEMyMS4xIDQgMjIgNC45IDIyIDZWMThDMjIgMTkuMSAyMS4xIDIwIDIwIDIwSDRDMi45IDIwIDIgMTkuMSAyIDE4VjZDMiA0LjkgMi45IDQgNCA0WiIgc3Ryb2tlPSIjMDAwMDAwIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIvPgo8cGF0aCBkPSJMMjIgNkwxMiAxM0wyIDYiIHN0cm9rZT0iIzAwMDAwMCIgc3Ryb2tlLXdpZHRoPSIyIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz4KPC9zdmc+" alt="Email">
+                        <span class="start">GET UPDATES</span>
+                        <span class="done">THANK YOU!</span>
+                    </button>
+                </form>
+                <div class="hs-form-frame" data-region="eu1" data-form-id="2934a984-b51f-4126-92f0-e1cef960afa2" data-portal-id="146089797"></div>
+            </div>
+
+            <div class="sponsors-section">
+                <p class="sponsors-title">Proudly supported by</p>
+                <div class="sponsors-logos">
+                    <img src="assets/images/Cambridge.png" alt="Cambridge" class="sponsor-logo">
+                    <img src="assets/images/King's.png" alt="King's College" class="sponsor-logo">
+                    <img src="assets/images/Mistral.png" alt="Mistral" class="sponsor-logo">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+$(document).ready(function () {
+    var basicTimeline = anime.timeline(),
+        doneTimeline = anime.timeline();
+    var trigger = true;
+
+    $('.newsletter-form .newsletter-button').click(function (e) {
+        e.preventDefault();
+        if ($(this).hasClass('first')) {
+            trigger = false;
+            $(this).removeClass('first').addClass('active');
+            basicTimeline
+                .add({
+                    targets: '.newsletter-button',
+                    width: 52,
+                    paddingLeft: 14,
+                    paddingRight: 14,
+                    translateX: 78,
+                    scale: 1.1,
+                    duration: 800,
+                    easing: 'easeOutQuart'
+                })
+                .add({
+                    targets: '.newsletter-form .newsletter-input',
+                    width: 296,
+                    opacity: 1,
+                    duration: 1000,
+                    offset: '-=600',
+                    easing: 'easeOutQuart'
+                })
+                .add({
+                    targets: '.newsletter-form .newsletter-button img',
+                    opacity: 1,
+                    translateX: 12,
+                    duration: 800,
+                    offset: '-=800',
+                    easing: 'easeOutQuart',
+                    complete: function(anim) {
+                        trigger = true;
+                    }
+                })
+        } else if ($(this).hasClass('active') && trigger) {
+            $(this).removeClass('active').addClass('done');
+            
+            // Capture email from input field
+            var email = $('.newsletter-input').val();
+            
+            // Submit to HubSpot if email is provided
+            if (email && email.includes('@')) {
+                submitToHubSpot(email);
+            }
+            
+            doneTimeline
+                .add({
+                    targets: '.newsletter-button',
+                    translateX: 144,
+                    duration: 500,
+                    scale: 1.1,
+                    easing: 'easeOutQuart'
+                })
+                .add({
+                    targets: '.newsletter-button img',
+                    opacity: 0,
+                    duration: 250,
+                    offset: '-=400',
+                    easing: 'easeOutQuart'
+                })
+                .add({
+                    targets: '.newsletter-button',
+                    width: 150,
+                    scale: 1.0,
+                    translateX: 0,
+                    duration: 500,
+                    offset: '-=250',
+                    easing: 'easeOutQuart'
+                })
+                .add({
+                    targets: '.newsletter-form .newsletter-input',
+                    width: 0,
+                    opacity: 0,
+                    translateX: 0,
+                    duration: 500,
+                    offset: '-=500',
+                    easing: 'easeOutQuart'
+                })
+                .add({
+                    targets: '.newsletter-form .newsletter-button .done',
+                    opacity: 1,
+                    duration: 400,
+                    offset: '-=250',
+                    easing: 'easeOutQuart'
+                })
+        }
+    });
+    
+    // Function to submit email to HubSpot programmatically
+    function submitToHubSpot(email) {
+        // Wait for HubSpot form to be ready
+        if (window.hbspt) {
+            window.hbspt.forms.create({
+                region: "eu1",
+                portalId: "146089797",
+                formId: "2934a984-b51f-4126-92f0-e1cef960afa2",
+                target: '.hs-form-frame',
+                onFormReady: function($form) {
+                    // Fill and submit the form programmatically
+                    $form.find('input[name="email"]').val(email);
+                    $form.find('input[type="submit"]').click();
+                }
+            });
+        } else {
+            // Fallback: try again after a short delay
+            setTimeout(function() {
+                submitToHubSpot(email);
+            }, 500);
+        }
+    }
+});
+</script>
+</html> 

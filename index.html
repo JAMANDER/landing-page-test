@@ -10,7 +10,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://js-eu1.hsforms.net/forms/embed/146089797.js" defer></script>
     <style>
         * {
             margin: 0;
@@ -171,18 +170,14 @@
             background-color: #E8DDD5;
         }
 
-        /* HubSpot form integration */
-        .hs-form-frame {
+        /* Hidden Google Forms iframe */
+        .google-form-frame {
             display: none !important;
             position: absolute;
             left: -9999px;
             opacity: 0;
-        }
-
-        /* Style HubSpot form to match design */
-        .hs-form-frame iframe {
-            border: none !important;
-            background: transparent !important;
+            width: 0;
+            height: 0;
         }
 
         .sponsors-section {
@@ -401,7 +396,9 @@
                         <span class="done">THANK YOU!</span>
                     </button>
                 </form>
-                <div class="hs-form-frame" data-region="eu1" data-form-id="2934a984-b51f-4126-92f0-e1cef960afa2" data-portal-id="146089797"></div>
+                
+                <!-- Hidden Google Forms iframe for submission -->
+                <iframe class="google-form-frame" src="https://docs.google.com/forms/d/e/1FAIpQLSdnDeWKQtQ4EnLZvBuDL9gzyjj2YzVBcjEmFM1njJJiVMWVzQ/viewform?embedded=true" width="640" height="375" frameborder="0" marginheight="0" marginwidth="0">Loading…</iframe>
             </div>
 
             <div class="sponsors-section">
@@ -462,9 +459,9 @@ $(document).ready(function () {
             // Capture email from input field
             var email = $('.newsletter-input').val();
             
-            // Submit to HubSpot if email is provided
+            // Submit to Google Forms if email is provided
             if (email && email.includes('@')) {
-                submitToHubSpot(email);
+                submitToGoogleForms(email);
             }
             
             doneTimeline
@@ -510,26 +507,56 @@ $(document).ready(function () {
         }
     });
     
-    // Function to submit email to HubSpot programmatically
-    function submitToHubSpot(email) {
-        // Wait for HubSpot form to be ready
-        if (window.hbspt) {
-            window.hbspt.forms.create({
-                region: "eu1",
-                portalId: "146089797",
-                formId: "2934a984-b51f-4126-92f0-e1cef960afa2",
-                target: '.hs-form-frame',
-                onFormReady: function($form) {
-                    // Fill and submit the form programmatically
-                    $form.find('input[name="email"]').val(email);
-                    $form.find('input[type="submit"]').click();
-                }
-            });
-        } else {
-            // Fallback: try again after a short delay
-            setTimeout(function() {
-                submitToHubSpot(email);
-            }, 500);
+    // Function to submit email to Google Forms programmatically
+    function submitToGoogleForms(email) {
+        // Get the Google Forms iframe
+        var iframe = $('.google-form-frame')[0];
+        
+        // Wait for iframe to load, then try to fill and submit
+        if (iframe) {
+            try {
+                // Create a new form submission URL with the email pre-filled
+                // Note: You'll need to inspect the Google Form to get the correct field name
+                // For now, we'll open the form in a new tab/window (invisible)
+                var formUrl = 'https://docs.google.com/forms/d/e/1FAIpQLSdnDeWKQtQ4EnLZvBuDL9gzyjj2YzVBcjEmFM1njJJiVMWVzQ/formResponse';
+                
+                // Create a hidden form to submit to Google Forms
+                var hiddenForm = $('<form>', {
+                    'method': 'POST',
+                    'action': formUrl,
+                    'target': 'google-form-target',
+                    'style': 'display: none;'
+                });
+                
+                // Add email field (you may need to adjust the field name)
+                // To find the correct field name, inspect the Google Form's HTML
+                hiddenForm.append($('<input>', {
+                    'type': 'email',
+                    'name': 'entry.556095355', // Replace with actual field name from Google Form
+                    'value': email
+                }));
+                
+                // Create hidden iframe target
+                var hiddenTarget = $('<iframe>', {
+                    'name': 'google-form-target',
+                    'style': 'display: none;'
+                });
+                
+                // Append to body and submit
+                $('body').append(hiddenForm).append(hiddenTarget);
+                hiddenForm.submit();
+                
+                // Clean up after submission
+                setTimeout(function() {
+                    hiddenForm.remove();
+                    hiddenTarget.remove();
+                }, 1000);
+                
+            } catch (error) {
+                console.log('Google Forms submission error:', error);
+                // Fallback: open form in new tab
+                window.open('https://docs.google.com/forms/d/e/1FAIpQLSdnDeWKQtQ4EnLZvBuDL9gzyjj2YzVBcjEmFM1njJJiVMWVzQ/viewform', '_blank');
+            }
         }
     }
 });
